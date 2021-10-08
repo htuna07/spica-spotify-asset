@@ -1,12 +1,12 @@
-# BUCKET - Spotify-Playlist
+# BUCKET - Playlist
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-playlist-5
+  name: playlist-bucket
 spec:
-  title: Spotify-Playlist
+  title: Playlist
   description: Describe your new bucket
-  icon: contactless
+  icon: playlist_add
   primary: name
   readOnly: false
   history: false
@@ -51,15 +51,15 @@ spec:
     read: "!private || some(document.admins.identity_id, [auth._id])"
   order: 4
 ---
-# BUCKET - Spotify-Album
+# BUCKET - Album
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-album-4
+  name: album-bucket
 spec:
-  title: Spotify-Album
+  title: Album
   description: Describe your new bucket
-  icon: contactless
+  icon: album
   primary: name
   readOnly: false
   history: false
@@ -92,20 +92,20 @@ spec:
       minimum: 0
       maximum: 100
   acl:
-    write: auth._id == document.singer.identity_id || auth._id ==
+    write: auth._id == document.Artist.identity_id || auth._id ==
       document.user.identity_id
     read: true==true
   order: 3
 ---
-# BUCKET - Spotify-Music
+# BUCKET - Track
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-music-3
+  name: track-bucket
 spec:
-  title: Spotify-Music
+  title: Track
   description: Describe your new bucket
-  icon: contactless
+  icon: music_note
   primary: name
   readOnly: false
   history: false
@@ -122,10 +122,10 @@ spec:
       description: Description of the description input
       options:
         position: bottom
-    createdat:
+    created_at:
       type: date
       title: created_at
-      description: Description of the createdat input
+      description: Description of the created_at input
       options:
         position: bottom
       default: :created_at
@@ -138,7 +138,7 @@ spec:
     source:
       type: storage
       title: source
-      description: Description of the sourc input
+      description: Description of the source input
       options:
         position: bottom
     clip:
@@ -265,21 +265,21 @@ spec:
             - Deutsch
       readOnly: false
   acl:
-    write: auth._id == document.singer.identity_id || auth._id ==
+    write: auth._id == document.Artist.identity_id || auth._id ==
       document.user.identity_id
     read: true == true
   order: 2
   required: []
 ---
-# BUCKET - Spotify-Singer
+# BUCKET - Artist
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-singer-2
+  name: artist-bucket
 spec:
-  title: Spotify-Singer
+  title: Artist
   description: Describe your new bucket
-  icon: contactless
+  icon: interpreter_mode
   primary: name
   readOnly: false
   history: false
@@ -343,15 +343,15 @@ spec:
     read: true==true
   order: 1
 ---
-# BUCKET - Spotify-User
+# BUCKET - User
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-user-1
+  name: user-bucket
 spec:
-  title: Spotify-User
+  title: User
   description: Describe your new bucket
-  icon: contactless
+  icon: account_circle
   primary: username
   readOnly: false
   history: false
@@ -438,15 +438,15 @@ spec:
     read: true==true
   order: 0
 ---
-# BUCKET - Spotify-Music
+# BUCKET - Track
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-music-3
+  name: track-bucket
 spec:
-  title: Spotify-Music
+  title: Track
   description: Describe your new bucket
-  icon: contactless
+  icon: music_note
   primary: name
   readOnly: false
   history: false
@@ -488,10 +488,10 @@ spec:
       description: Description of the clip input
       options:
         position: bottom
-    singer:
+    artist:
       type: relation
-      title: singer
-      description: Description of the singer input
+      title: Artist
+      description: Description of the Artist input
       options:
         position: bottom
       relationType: onetoone
@@ -499,7 +499,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-singer-2
+          schemaName: artist-bucket
     user:
       type: relation
       title: user
@@ -511,7 +511,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
     album:
       type: relation
       title: album
@@ -523,7 +523,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-album-4
+          schemaName: album-bucket
     likes:
       type: relation
       title: likes
@@ -535,7 +535,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
     stream_count:
       type: number
       title: stream_count
@@ -655,21 +655,21 @@ spec:
             - Deutsch
       readOnly: false
   acl:
-    write: auth._id == document.singer.identity_id || auth._id ==
+    write: auth._id == document.Artist.identity_id || auth._id ==
       document.user.identity_id
     read: true == true
   order: 2
   required: []
 ---
-# BUCKET - Spotify-Singer
+# BUCKET - Artist
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-singer-2
+  name: artist-bucket
 spec:
-  title: Spotify-Singer
+  title: Artist
   description: Describe your new bucket
-  icon: contactless
+  icon: interpreter_mode
   primary: name
   readOnly: false
   history: false
@@ -720,10 +720,10 @@ spec:
       options:
         position: bottom
       default: false
-    uploaded_musicss:
+    uploaded_Trackss:
       type: relation
-      title: uploaded_musicss
-      description: Description of the uploaded_musicss input
+      title: uploaded_Trackss
+      description: Description of the uploaded_Trackss input
       options:
         position: bottom
       relationType: onetomany
@@ -731,7 +731,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-music-3
+          schemaName: track-bucket
     uploaded_albums:
       type: relation
       title: uploaded_albums
@@ -743,7 +743,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-album-4
+          schemaName: album-bucket
     followers:
       type: relation
       title: followers
@@ -755,7 +755,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
     popularity:
       type: number
       title: popularity
@@ -769,15 +769,15 @@ spec:
     read: true==true
   order: 1
 ---
-# BUCKET - Spotify-User
+# BUCKET - User
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-user-1
+  name: user-bucket
 spec:
-  title: Spotify-User
+  title: User
   description: Describe your new bucket
-  icon: contactless
+  icon: account_circle
   primary: username
   readOnly: false
   history: false
@@ -861,7 +861,7 @@ spec:
       default: false
     followings:
       type: relation
-      title: followed_singers
+      title: followed_Artists
       description: Description of the followings input
       options:
         position: bottom
@@ -870,7 +870,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-singer-2
+          schemaName: artist-bucket
     friends:
       type: relation
       title: friends
@@ -882,11 +882,11 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
-    uploaded_musics:
+          schemaName: user-bucket
+    uploaded_tracks:
       type: relation
-      title: uploaded_musicss
-      description: Description of the uploaded_musics input
+      title: uploaded_tracks
+      description: Description of the uploaded_tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -894,7 +894,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-music-3
+          schemaName: track-bucket
     uploaded_albums:
       type: relation
       title: uploaded_albums
@@ -906,7 +906,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-album-4
+          schemaName: album-bucket
     uploaded_playlists:
       type: relation
       title: uploaded_playlists
@@ -918,11 +918,11 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-playlist-5
-    listening_history:
+          schemaName: playlist-bucket
+    play_history:
       type: relation
-      title: listening_history
-      description: Description of the listening_history input
+      title: play_history
+      description: Description of the play_history input
       options:
         position: bottom
       relationType: onetomany
@@ -930,7 +930,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-music-3
+          schemaName: track-bucket
     currently_playing:
       type: relation
       title: currently_playing
@@ -942,7 +942,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-music-3
+          schemaName: track-bucket
     playlists:
       type: relation
       title: playlists
@@ -954,11 +954,11 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-playlist-5
-    liked_musics:
+          schemaName: playlist-bucket
+    liked_tracks:
       type: relation
-      title: liked_musics
-      description: Description of the liked_musics input
+      title: liked_Tracks
+      description: Description of the liked_Tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -966,7 +966,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-music-3
+          schemaName: track-bucket
     liked_albums:
       type: relation
       title: liked_albums
@@ -978,7 +978,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-album-4
+          schemaName: album-bucket
     liked_playlists:
       type: relation
       title: liked_playlists
@@ -990,21 +990,21 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-playlist-5
+          schemaName: playlist-bucket
   acl:
     write: auth._id == document.identity_id || auth.identifier == "spica"
     read: true==true
   order: 0
 ---
-# BUCKET - Spotify-Playlist
+# BUCKET - Playlist
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-playlist-5
+  name: playlist-bucket
 spec:
-  title: Spotify-Playlist
+  title: Playlist
   description: Describe your new bucket
-  icon: contactless
+  icon: playlist_add
   primary: name
   readOnly: false
   history: false
@@ -1021,10 +1021,10 @@ spec:
       description: Description of the image input
       options:
         position: bottom
-    musics:
+    tracks:
       type: relation
-      title: musics
-      description: Description of the musics input
+      title: Tracks
+      description: Description of the Tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -1032,7 +1032,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-music-3
+          schemaName: track-bucket
     created_at:
       type: date
       title: created_at
@@ -1058,7 +1058,7 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
     admins:
       type: relation
       title: admins
@@ -1069,7 +1069,7 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
     likes:
       type: relation
       title: likes
@@ -1080,7 +1080,7 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
     private:
       type: boolean
       title: private
@@ -1094,15 +1094,15 @@ spec:
     read: "!private || some(document.admins.identity_id, [auth._id])"
   order: 4
 ---
-# BUCKET - Spotify-Album
+# BUCKET - Album
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: spotify-album-4
+  name: album-bucket
 spec:
-  title: Spotify-Album
+  title: Album
   description: Describe your new bucket
-  icon: contactless
+  icon: album
   primary: name
   readOnly: false
   history: false
@@ -1119,10 +1119,10 @@ spec:
       description: Description of the cover input
       options:
         position: bottom
-    musics:
+    tracks:
       type: relation
-      title: musics
-      description: Description of the Musics input
+      title: Tracks
+      description: Description of the Tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -1130,7 +1130,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: spotify-music-3
+          schemaName: track-bucket
     created_at:
       type: date
       title: created_at
@@ -1149,7 +1149,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
     popularity:
       type: number
       title: popularity
@@ -1158,17 +1158,17 @@ spec:
         position: bottom
       minimum: 0
       maximum: 100
-    singer:
+    artist:
       type: relation
-      title: singer
-      description: Description of the singer input
+      title: Artist
+      description: Description of the Artist input
       options:
         position: bottom
       relationType: onetoone
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: spotify-singer-2
+          schemaName: artist-bucket
     user:
       type: relation
       title: user
@@ -1179,9 +1179,9 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: spotify-user-1
+          schemaName: user-bucket
   acl:
-    write: auth._id == document.singer.identity_id || auth._id ==
+    write: auth._id == document.Artist.identity_id || auth._id ==
       document.user.identity_id
     read: true==true
   order: 3
