@@ -1,8 +1,38 @@
+# BUCKET - Track Kind
+apiVersion: bucket/v1
+kind: Schema
+metadata:
+  name: spica-spotify-asset-track-kind-bucket
+spec:
+  title: Track Kind
+  description: Describe your new bucket
+  icon: music_note
+  primary: title
+  readOnly: false
+  history: false
+  properties:
+    title:
+      type: string
+      title: title
+      description: Description of the title input
+      options:
+        position: bottom
+    image:
+      type: storage
+      title: image
+      description: Description of the image input
+      options:
+        position: bottom
+  acl:
+    write: auth.identifier == "spica"
+    read: true==true
+  order: 4
+---
 # BUCKET - Track
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: track-bucket
+  name: spica-spotify-asset-track-bucket
 spec:
   title: Track
   description: Describe your new bucket
@@ -50,8 +80,8 @@ spec:
         position: bottom
     artist:
       type: relation
-      title: Artist
-      description: Description of the Artist input
+      title: artist
+      description: Description of the artist input
       options:
         position: bottom
       relationType: onetoone
@@ -59,7 +89,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: artist-bucket
+          schemaName: spica-spotify-asset-artist-bucket
     user:
       type: relation
       title: user
@@ -71,7 +101,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     album:
       type: relation
       title: album
@@ -83,7 +113,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: album-bucket
+          schemaName: spica-spotify-asset-album-bucket
     likes:
       type: relation
       title: likes
@@ -95,7 +125,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     stream_count:
       type: number
       title: stream_count
@@ -165,35 +195,18 @@ spec:
             position: bottom
           maximum: 100
           minimum: 0
-        kind:
-          type: multiselect
-          title: kind
-          description: Description of the kind input
+        kinds:
+          type: relation
+          title: kinds
+          description: Description of the kinds input
           options:
             position: bottom
-          items:
-            type: string
-            enum:
-              - Rap
-              - Caz
-              - Classic
-              - Hiphop
-              - Pop
-              - Rock
-        available_countries:
-          type: multiselect
-          title: available_countries
-          description: Description of the available_countries input
-          options:
-            position: bottom
-          items:
-            type: string
-            enum:
-              - TR
-              - EN
-              - US
-              - DE
-              - BR
+          relationType: onetomany
+          dependent: false
+          primary: name
+          bucket:
+            resourceFieldRef:
+              schemaName: spica-spotify-asset-track-kind-bucket
         explicit:
           type: boolean
           title: explicit
@@ -216,7 +229,7 @@ spec:
       readOnly: false
   acl:
     write: auth._id == document.artist.identity_id || auth._id ==
-      document.user.identity_id
+      document.user.identity_id || auth.identifier == "spica"
     read: true == true
   order: 2
   required: []
@@ -225,11 +238,11 @@ spec:
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: artist-bucket
+  name: spica-spotify-asset-artist-bucket
 spec:
   title: Artist
   description: Describe your new bucket
-  icon: interpreter_mode
+  icon: music_note
   primary: name
   readOnly: false
   history: false
@@ -252,15 +265,12 @@ spec:
       description: Description of the identity_id input
       options:
         position: bottom
-    profile_pictures:
-      type: array
-      title: profile_pictures
-      description: Description of the profile_pictures input
+    profile_picture:
+      type: storage
+      title: profile_picture
+      description: Description of the profile_picture input
       options:
         position: bottom
-      items:
-        title: Title of the items
-        type: storage
     birthday:
       type: date
       title: birthday
@@ -280,10 +290,10 @@ spec:
       options:
         position: bottom
       default: false
-    uploaded_Trackss:
+    uploaded_tracks:
       type: relation
-      title: uploaded_Trackss
-      description: Description of the uploaded_Trackss input
+      title: uploaded_tracks
+      description: Description of the uploaded_tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -291,7 +301,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: track-bucket
+          schemaName: spica-spotify-asset-track-bucket
     uploaded_albums:
       type: relation
       title: uploaded_albums
@@ -303,7 +313,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: album-bucket
+          schemaName: spica-spotify-asset-album-bucket
     followers:
       type: relation
       title: followers
@@ -315,7 +325,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     popularity:
       type: number
       title: popularity
@@ -333,11 +343,11 @@ spec:
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: user-bucket
+  name: spica-spotify-asset-user-bucket
 spec:
   title: User
   description: Describe your new bucket
-  icon: account_circle
+  icon: music_note
   primary: username
   readOnly: false
   history: false
@@ -366,10 +376,10 @@ spec:
       description: Description of the identity_id input
       options:
         position: bottom
-    mail:
+    email:
       type: string
-      title: mail
-      description: Description of the mail input
+      title: email
+      description: Description of the email input
       options:
         position: bottom
     bio:
@@ -419,10 +429,10 @@ spec:
       options:
         position: bottom
       default: false
-    followings:
+    followed_artists:
       type: relation
-      title: followed_Artists
-      description: Description of the followings input
+      title: followed_artists
+      description: Description of the followed_artists input
       options:
         position: bottom
       relationType: onetomany
@@ -430,7 +440,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: artist-bucket
+          schemaName: spica-spotify-asset-artist-bucket
     friends:
       type: relation
       title: friends
@@ -442,7 +452,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     uploaded_tracks:
       type: relation
       title: uploaded_tracks
@@ -454,7 +464,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: track-bucket
+          schemaName: spica-spotify-asset-track-bucket
     uploaded_albums:
       type: relation
       title: uploaded_albums
@@ -466,7 +476,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: album-bucket
+          schemaName: spica-spotify-asset-album-bucket
     uploaded_playlists:
       type: relation
       title: uploaded_playlists
@@ -478,7 +488,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: playlist-bucket
+          schemaName: spica-spotify-asset-playlist-bucket
     play_history:
       type: relation
       title: play_history
@@ -490,7 +500,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: track-bucket
+          schemaName: spica-spotify-asset-track-bucket
     currently_playing:
       type: relation
       title: currently_playing
@@ -502,7 +512,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: track-bucket
+          schemaName: spica-spotify-asset-track-bucket
     playlists:
       type: relation
       title: playlists
@@ -514,11 +524,11 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: playlist-bucket
+          schemaName: spica-spotify-asset-playlist-bucket
     liked_tracks:
       type: relation
-      title: liked_Tracks
-      description: Description of the liked_Tracks input
+      title: liked_tracks
+      description: Description of the liked_tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -526,7 +536,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: track-bucket
+          schemaName: spica-spotify-asset-track-bucket
     liked_albums:
       type: relation
       title: liked_albums
@@ -538,7 +548,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: album-bucket
+          schemaName: spica-spotify-asset-album-bucket
     liked_playlists:
       type: relation
       title: liked_playlists
@@ -550,7 +560,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: playlist-bucket
+          schemaName: spica-spotify-asset-playlist-bucket
   acl:
     write: auth._id == document.identity_id || auth.identifier == "spica"
     read: true==true
@@ -560,11 +570,11 @@ spec:
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: playlist-bucket
+  name: spica-spotify-asset-playlist-bucket
 spec:
   title: Playlist
   description: Describe your new bucket
-  icon: playlist_add
+  icon: music_note
   primary: name
   readOnly: false
   history: false
@@ -583,8 +593,8 @@ spec:
         position: bottom
     tracks:
       type: relation
-      title: Tracks
-      description: Description of the Tracks input
+      title: tracks
+      description: Description of the tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -592,7 +602,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: track-bucket
+          schemaName: spica-spotify-asset-track-bucket
     created_at:
       type: date
       title: created_at
@@ -618,7 +628,7 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     admins:
       type: relation
       title: admins
@@ -629,7 +639,7 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     likes:
       type: relation
       title: likes
@@ -640,7 +650,7 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     private:
       type: boolean
       title: private
@@ -649,19 +659,19 @@ spec:
         position: bottom
       default: false
   acl:
-    write: 'auth._id == document.owner.identity_id||some(document.admins.identity_id, [auth._id])'
-    read: 'document.private == false||some(document.admins.identity_id, [auth._id])||document.owner._id==auth._id'
+    write: 'auth._id == document.owner.identity_id||some(document.admins.identity_id, [auth._id]) || auth.identifier == "spica"'
+    read: 'document.private == false||some(document.admins.identity_id, [auth._id])||document.owner._id==auth._id || auth.identifier == "spica"'
   order: 4
 ---
 # BUCKET - Album
 apiVersion: bucket/v1
 kind: Schema
 metadata:
-  name: album-bucket
+  name: spica-spotify-asset-album-bucket
 spec:
-  title: Album
+  title: Music Album
   description: Describe your new bucket
-  icon: album
+  icon: music_note
   primary: name
   readOnly: false
   history: false
@@ -680,8 +690,8 @@ spec:
         position: bottom
     tracks:
       type: relation
-      title: Tracks
-      description: Description of the Tracks input
+      title: tracks
+      description: Description of the tracks input
       options:
         position: bottom
       relationType: onetomany
@@ -689,7 +699,7 @@ spec:
       primary: name
       bucket:
         resourceFieldRef:
-          schemaName: track-bucket
+          schemaName: spica-spotify-asset-track-bucket
     created_at:
       type: date
       title: created_at
@@ -708,7 +718,7 @@ spec:
       primary: username
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
     popularity:
       type: number
       title: popularity
@@ -719,15 +729,15 @@ spec:
       maximum: 100
     artist:
       type: relation
-      title: Artist
-      description: Description of the Artist input
+      title: artist
+      description: Description of the artist input
       options:
         position: bottom
       relationType: onetoone
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: artist-bucket
+          schemaName: spica-spotify-asset-artist-bucket
     user:
       type: relation
       title: user
@@ -738,9 +748,64 @@ spec:
       dependent: false
       bucket:
         resourceFieldRef:
-          schemaName: user-bucket
+          schemaName: spica-spotify-asset-user-bucket
   acl:
     write: auth._id == document.artist.identity_id || auth._id ==
-      document.user.identity_id
+      document.user.identity_id || auth.identifier == "spica"
     read: true==true
   order: 3
+  ---
+# API KEY
+apiVersion: passport/v1
+kind: ApiKey
+metadata:
+  name: spotify-asset-apikey
+spec:
+  name: Secret Api Key For Music Streaming
+  policies:
+    - BucketFullAccess
+    - FunctionFullAccess
+    - IdentityFullAccess
+---
+# FUNCTION - Music Streaming Authorization
+apiVersion: function/v1
+kind: Function
+metadata:
+  name: spica-spotify-asset-authorization-function
+spec:
+  language: javascript
+  timeout: 25
+  description: Authorization process
+  environment:
+    - name: USER_BUCKET_ID
+      valueFrom:
+        resourceFieldRef:
+          schemaName: spica-spotify-asset-user-bucket
+    - name: SECRET_API_KEY
+      valueFrom:
+        resourceFieldRef:
+          apiKeyName: spotify-asset-apikey
+  dependency:
+    - name: "@spica-devkit/bucket"
+      version: latest
+    - name: "@spica-devkit/identity"
+      version: latest
+  title: Music Streaming Authorization
+  code: ./function/spica-spotify-asset-authorization-function.js
+  runtime:
+    name: Node
+    language: Javascript
+---
+# TRIGGER - register
+apiVersion: function/v1
+kind: Trigger
+metadata:
+  name: register
+spec:
+  type: http
+  active: true
+  name: register
+  func: spica-spotify-asset-authorization-function
+  httpOptions:
+    method: Post
+    path: /register
